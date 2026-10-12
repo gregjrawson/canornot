@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1.0, viewport-fit=cover' />
+<title>can or not</title>
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css' />
+
+<link rel='preconnect' href='https://fonts.googleapis.com' />
+<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+<link href='https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap' rel='stylesheet' />
+
+<style>
+@font-face{
+  font-family:'Brushfire';
+  src:url('Brushfire.otf') format('opentype');
+  font-weight:normal;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root{
+  --bg:#F90355;
+  --panel:#111;
+  --panel2:#1a1a1a;
+  --text:#fff;
+  --muted:#bdbdbd;
+  --border:#7a7a7a;
+  --border2:#9a9a9a;
+  --accent:#F90355;
+
+  /* one consistent tilt system */
+  --tilt:-15deg;
+  --tiltSkew:15deg;
+}
+
+/* iOS Safari viewport fix */
+html{
+  background-color:#EED6B9;
+  height:100%;
+}
+
+body{
+  margin:0;
+  min-height:100dvh;
+  background:none;
+  color:var(--text);
+  font-family:'Oswald',-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Arial,sans-serif;
+  text-align:center;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-image:var(--bg-img, url('bg-light.jpg'));
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+  z-index:-1;
+}
+
+/* force Oswald everywhere */
+html, body, input, button, textarea, select{
+  font-family:'Oswald',-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Arial,sans-serif;
+}
+
+.wrap{
+  min-height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px 16px;
+  box-sizing:border-box;
+}
+
+.card{
+  width:min(760px,92vw);
+  margin:0 auto;
+}
+
+.logo{
+  width:min(220px,45vw);
+  max-width:220px;
+  display:block;
+  margin:0 auto 16px;
+}
+
+.sub{
+  font-size:clamp(14px,2.0vw,18px);
+  margin:0 0 12px;
+  font-weight:600;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+.btn{
+  padding:12px 22px;
+  font-size:16px;
+  font-weight:700;
+  border-radius:12px;
+  border:0;
+  cursor:pointer;
+  background:#fff;
+  color:#000;
+  min-width:132px;
+}
+
+.btn:hover{
+  opacity:0.92;
+}
+
+.btn.dark{
+  background:transparent;
+  color:#fff;
+  border:2px solid #fff;
+}
+
+.msg{
+  margin-top:6px;
+  min-height:22px;
+  font-size:16px;
+  font-weight:800;
+  color:#fff;
+}
+
+.phone-area{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+
+/* input wrapper */
+.iti{
+  width:100%;
+  max-width:480px;
+  border-radius:16px;
+  background:var(--panel);
+  overflow:visible;
+  box-shadow:0 0 0 4px var(--border);
+}
+
+.iti__country-list{
+  z-index:9999 !important;
+}
+
+#phone{
+  width:100%;
+  padding:14px 14px;
+  font-size:18px;
+  border:none;
+  background:transparent;
+  color:#111;
+  outline:none;
+  box-sizing:border-box;
+  font-family:'Oswald',sans-serif;
+}
+
+.iti--separate-dial-code .iti__selected-flag{
+  background:transparent;
+  border-radius:12px 0 0 12px;
+}
+
+.iti__selected-dial-code{
+  color:#111;
+  font-weight:700;
+}
+
+.iti__country-list{
+  background:#fff!important;
+  color:#000!important;
+  border-radius:12px;
+  overflow:auto;
+  border:1px solid #ddd;
+}
+
+.iti__country{
+  color:#000!important;
+}
+
+.iti__country:hover{
+  background:#f1f1f1!important;
+}
+
+.iti__country.iti__highlight{
+  background:#eaeaea!important;
+}
+
+.store-link{
+  margin-top:18px;
+  font-size:14px;
+  color:#fff;
+  cursor:pointer;
+  text-decoration:underline;
+}
+
+.store-link:hover{
+  color:#fff;
+}
+
+/* STORE MODAL */
+.store-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(6px);
+  z-index:1000001;
+  align-items:center;
+  justify-content:center;
+}
+
+.store-modal-content{
+  width:min(600px,92vw);
+  padding:36px 28px;
+  border-radius:28px;
+  background:transparent;
+  background-size:cover;
+  text-align:center;
+  height:80vh;
+  overflow-y:auto;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  box-sizing:border-box;
+}
+
+.store-modal-content h2{
+  text-align:center;
+  margin-top:0;
+  margin-bottom:24px;
+  font-size:24px;
+  color:#FC8983;
+}
+
+.about-logo{
+  width:180px;
+  height:auto;
+  margin:0 auto 24px;
+  display:block;
+  position:relative;
+  top:-30px;
+}
+
+.store-logo{
+  width:180px;
+  height:auto;
+  margin:0 auto 12px;
+  display:block;
+  position:relative;
+  top:-20px;
+}
+
+.store-modal-sub{
+  text-align:center;
+  width:min(530px,97%);
+  margin:0 auto 20px;
+  color:#fff;
+  font-size:19px;
+  line-height:1.48;
+}
+
+.store-modal-sub p{
+  margin:0 0 0.6em;
+}
+
+.store-item{
+  margin:0;
+  padding:18px 0;
+  font-size:15px;
+  line-height:1.45;
+  color:#fff;
+  font-weight:400;
+  border-top:1px solid rgba(255,255,255,0.22);
+}
+
+.store-item strong{
+  font-weight:600;
+  color:#FC8983;
+}
+
+.store-item br + *{
+  font-weight:400;
+  opacity:0.85;
+}
+
+.store-item:first-of-type{
+  border-top:none;
+  padding-top:6px;
+}
+
+.reward-tag{
+  color:rgba(255,255,255,0.85);
+  font-weight:600;
+}
+
+.store-close{
+  position:absolute;
+  right:24px;
+  top:20px;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.timer{
+  position:absolute;
+  left:50%;
+  top:60vh;
+  transform:translateX(-50%);
+  font-family:'Oswald',-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Arial,sans-serif;
+  font-size:clamp(12.6px,2.25vw,16.2px);
+  font-weight:600;
+  letter-spacing:-0.7px;
+  color:#F90355;
+  opacity:1;
+}
+
+/* full-screen screens use iOS-safe viewport */
+#screen-fail,
+#screen-phone.home,
+#screen-phrase,
+#screen-reward{
+  min-height:100svh;
+}
+
+@supports (height:100dvh){
+  #screen-fail,
+  #screen-phone.home,
+  #screen-phrase,
+  #screen-reward{
+    min-height:100dvh;
+  }
+}
+
+/* FAIL SCREEN */
+#screen-fail{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  z-index:2;
+  box-sizing:border-box;
+}
+
+/* LOCAL BLOCK SCREEN */
+#screen-local{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  z-index:2;
+  box-sizing:border-box;
+}
+
+.fail-wrap{
+  position:absolute;
+  left:50%;
+  top:calc(40vh + 100px);
+  transform:translate(-50%,-50%);
+  width:min(760px,92vw);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  pointer-events:auto;
+}
+
+.fail-main{
+  font-family:'Brushfire',sans-serif;
+  font-weight:500;
+  letter-spacing:1px;
+  font-size:clamp(140px,28vw,230px);
+  line-height:0.8;
+  color:#000;
+  margin-bottom:-6px;
+  position:relative;
+  top:35px;
+  animation:oopsWrong 700ms ease-out both;
+  transform:rotate(-7.5deg) skewX(-7.5deg) scale(1);
+  transform-origin:center;
+  display:block;
+}
+
+.fail-sub{
+  margin-top:2.9em;
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  letter-spacing:-0.7px;
+  font-size:clamp(19.5px,4.3vw,30px);
+  line-height:1.2;
+  color:#F90355;
+  opacity:0;
+  animation:failSubFade 1400ms ease-out 1100ms forwards;
+  display:inline-block;
+  transform:none;
+  min-height:5.6em;
+}
+
+.fail-pill{
+  margin-top:102px;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  border:0;
+  background:#F90355;
+  color:#fff;
+  font-family:'Oswald',sans-serif;
+  opacity:0;
+  animation:failSubFade 1400ms ease-out 1100ms forwards;
+  font-weight:600;
+  font-size:clamp(21.6px,4.68vw,32.4px);
+  letter-spacing:0;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(0,0,0,0.22);
+}
+
+.fail-pill:hover{
+  opacity:0.92;
+}
+
+/* HOME */
+#screen-phone.home{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  z-index:1;
+  box-sizing:border-box;
+}
+
+.home-top{
+  position:absolute;
+  left:50%;
+  top:calc(60px + env(safe-area-inset-top));
+  transform:translateX(-50%);
+  width:min(760px,92vw);
+  font-size:clamp(20px,4.8vw,38px);
+  line-height:1;
+  color:#fff;
+  opacity:0.95;
+}
+
+.home-mid{
+  position:absolute;
+  left:50%;
+  top:69vh;
+  transform:translate(-50%,-50%);
+  width:min(760px,92vw);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.home-sub{
+  margin:0 0 8px;
+  font-size:clamp(14px,3.2vw,20px);
+  font-weight:500;
+  letter-spacing:1px;
+}
+
+.phone-label{
+  position:relative;
+  top:5px;
+  margin-bottom:2px;
+  font-size:12px;
+  font-weight:400;
+  color:#111;
+  text-align:center;
+}
+
+.phone-note{
+  margin-top:0;
+  font-size:clamp(10.5px,2.6vw,14px);
+  color:#555;
+  max-width:220px;
+  line-height:1.35;
+  text-align:center;
+}
+
+.home-phone{
+  flex-direction:column;
+  gap:8px;
+  margin-top:0;
+  width:auto;
+  justify-content:center;
+  align-items:center;
+}
+
+.home .phone-combo{
+  display:flex;
+  align-items:center;
+  width:min(235px,78vw);
+  height:56px;
+  border-radius:28px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 12px 28px rgba(0,0,0,0.28);
+  position:relative;
+}
+
+.home .phone-combo::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0));
+  opacity:0;
+  border-radius:inherit;
+}
+
+/* country dropdown arrow */
+.home .phone-combo .iti__arrow{
+  border-left:5px solid transparent !important;
+  border-right:5px solid transparent !important;
+  border-top:7px solid #fff !important;
+  opacity:1 !important;
+}
+
+.home .phone-combo .iti__arrow.iti__arrow--up{
+  border-top:0 !important;
+  border-bottom:7px solid #fff !important;
+  opacity:1 !important;
+}
+
+.home .iti,
+.home .iti *{
+  font-family:inherit !important;
+}
+
+.home .phone-combo .iti{
+  flex:1;
+  width:auto;
+  max-width:none;
+  box-shadow:none;
+  background:transparent;
+  border-radius:0;
+  height:56px;
+}
+
+.home .phone-combo #phone{
+  flex:1;
+  height:56px;
+  padding-left:calc(10px + 0.6ch);
+  font-size:18px;
+  border:none;
+  background:transparent;
+  color:#111;
+  outline:none;
+  box-sizing:border-box;
+  font-family:'Oswald',-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Arial,sans-serif;
+  font-weight:400;
+}
+
+.home .phone-combo #phone::placeholder{
+  color:rgba(255,255,255,0.75);
+  opacity:1;
+}
+
+.home .phone-combo .home-enter{
+  width:46px;
+  min-width:46px;
+  height:46px;
+  padding:0 0 3px 0;
+  margin-right:6px;
+  border:none;
+  border-radius:50%;
+  background:#F90355;
+  color:#fff;
+  cursor:pointer;
+  position:relative;
+  font-weight:600;
+  font-family:'Oswald',-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Arial,sans-serif;
+  text-transform:none;
+  font-size:22px;
+}
+
+.home .phone-combo .home-enter:hover{
+  background:rgba(0,0,0,0.16);
+}
+
+.home .phone-combo .home-enter span{
+  display:inline-block;
+  transform:scaleX(1.25);
+}
+
+.chop-hotspot{
+  position:absolute;
+  left:20%;
+  bottom:5%;
+  width:38%;
+  height:11%;
+  z-index:21;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.kopi-hotspot{
+  position:absolute;
+  right:0%;
+  top:18%;
+  width:25%;
+  height:27%;
+  z-index:21;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.sign54-hotspot{
+  position:absolute;
+  left:40%;
+  top:12%;
+  width:38%;
+  height:10%;
+  z-index:21;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.about-hotspot{
+  position:absolute;
+  left:0%;
+  top:54%;
+  width:20%;
+  height:18%;
+  z-index:21;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.locations-hotspot{
+  position:absolute;
+  left:76%;
+  top:calc(67% - env(safe-area-inset-bottom));
+  width:34%;
+  height:19%;
+  z-index:20;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.bird-hotspot{
+  position:absolute;
+  left:82%;
+  top:56%;
+  width:20%;
+  height:11%;
+  z-index:21;
+  -webkit-tap-highlight-color:transparent;
+  cursor:pointer;
+}
+
+.about-home-panel{
+  display:none;
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:110vw;
+  max-width:500px;
+  z-index:30;
+}
+
+.about-home-panel img{
+  display:block;
+  width:100%;
+  height:auto;
+  filter:drop-shadow(0 12px 14px rgba(0,0,0,0.55));
+}
+
+.chop-panel{
+  display:none;
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:90vw;
+  max-width:400px;
+  z-index:30;
+}
+
+.chop-panel img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.kopi-panel{
+  display:none;
+  position:absolute;
+  right:4%;
+  top:24%;
+  width:260px;
+  z-index:30;
+}
+
+.kopi-panel img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.sign54-panel{
+  display:none;
+  position:absolute;
+  left:4%;
+  top:15%;
+  width:300px;
+  z-index:30;
+}
+
+.sign54-panel img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.bird-panel{
+  display:none;
+  position:absolute;
+  right:12%;
+  top:31%;
+  width:300px;
+  z-index:30;
+}
+
+.bird-panel img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.bird-panel-text{
+  color:#000;
+  font-size:16px;
+  font-weight:600;
+  line-height:1.2;
+}
+
+/* PHRASE */
+#screen-phrase{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  z-index:999999;
+  box-sizing:border-box;
+}
+
+.phrase-top{
+  position:absolute;
+  left:50%;
+  top:calc(10.4vh + 92px);
+  transform:translateX(-50%);
+  transform-origin:center;
+  width:min(680px,88vw);
+  margin:0;
+  text-align:center;
+  color:#F90355;
+  font-weight:600;
+  letter-spacing:-0.7px;
+  text-transform:none;
+  font-size:clamp(19.5px,4.3vw,30px);
+}
+
+.phrase-bubble{
+  position:absolute;
+  left:50%;
+  top:9.8vh;
+  transform:translateX(-50%);
+  width:128vw;
+  aspect-ratio:760 / 430;
+  height:auto;
+  background:none;
+  background-size:contain;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  z-index:5;
+  pointer-events:none;
+}
+
+.phrase-big{
+  font-family:'Brushfire',sans-serif;
+  font-weight:500;
+  letter-spacing:1px;
+  text-transform:none;
+  color:#000;
+  font-size:clamp(73.5px,14.04vw,118.8px);
+  line-height:0.8;
+  position:relative;
+  z-index:6;
+  margin:0 auto;
+  margin-top:155px;
+  max-width:60%;
+  text-align:center;
+  overflow-wrap:break-word;
+  display:block;
+  transform:rotate(-7.5deg) skewX(-7.5deg);
+  transform-origin:center;
+}
+
+.phrase-judge{
+  position:absolute;
+  left:50%;
+  top:calc(55.2vh + 50px);
+  transform:translateX(-50%);
+  width:min(760px,92vw);
+  font-weight:600;
+  letter-spacing:-0.3px;
+  font-size:clamp(19.5px,4.3vw,30px);
+  margin:0;
+  color:#F90355;
+  z-index:20;
+}
+
+.phrase-actions{
+  position:absolute;
+  left:50%;
+  top:calc(63vh + 30px);
+  transform:translateX(-50%);
+  width:min(720px,92vw);
+  display:flex;
+  flex-direction:row;
+  gap:40px;
+  align-items:center;
+  justify-content:center;
+}
+
+.phrase-btn{
+  width:100px;
+  min-width:100px;
+  padding:0;
+  height:100px;
+  border-radius:50%;
+  font-weight:600;
+  letter-spacing:0;
+  font-size:clamp(21.6px,4.68vw,32.4px);
+  text-transform:none;
+  border:0 !important;
+  background:#F90355;
+  color:#fff;
+  position:relative;
+  overflow:visible;
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  align-items:center;
+  box-shadow:0 10px 22px rgba(0,0,0,0.22);
+}
+
+.phrase-btn.good{
+  background:#F90355;
+}
+
+.phrase-btn.dark{
+  background:#000;
+  color:#fff;
+}
+
+.btn-icon{
+  position:absolute;
+  width:32px;
+  height:auto;
+  pointer-events:none;
+}
+
+.tick-icon{
+  top:-9px;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+.cross-icon{
+  top:-9px;
+  left:50%;
+  transform:translateX(-50%);
+  filter:none;
+}
+
+.btn-label{
+  line-height:1;
+  white-space:nowrap;
+  flex:1;
+  text-align:center;
+  padding-left:3px;
+}
+
+.salah-text{
+  color:#fff;
+}
+
+/* REWARD */
+#screen-reward{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  z-index:2;
+  box-sizing:border-box;
+}
+
+.success-wrap{
+  position:absolute;
+  left:50%;
+  top:35vh;
+  transform:translate(-50%,-50%);
+  width:min(760px,92vw);
+  text-align:center;
+  pointer-events:none;
+}
+
+.success-top{
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:clamp(19.5px,4.3vw,30px);
+  color:#F90355;
+  opacity:1;
+  letter-spacing:-0.7px;
+  transform:none;
+  display:inline-block;
+  margin-bottom:6px;
+  position:relative;
+  top:35px;
+}
+
+@keyframes successPop{
+  0%{
+    opacity:0;
+    transform:rotate(-7.5deg) skewX(-7.5deg) translateY(20px) scale(0.85);
+    filter:blur(6px);
+  }
+  60%{
+    opacity:1;
+    transform:rotate(-7.5deg) skewX(-7.5deg) translateY(-6px) scale(1.04);
+    filter:blur(0px);
+  }
+  100%{
+    opacity:1;
+    transform:rotate(-7.5deg) skewX(-7.5deg) translateY(0px) scale(1);
+  }
+}
+
+@keyframes slashReveal{
+  from{
+    clip-path:inset(0 100% 0 0);
+  }
+  to{
+    clip-path:inset(0 0 0 0);
+  }
+}
+
+@keyframes oopsWrong{
+  0%{
+    opacity:0;
+    transform:rotate(-7.5deg) skewX(-7.5deg) scale(6);
+    filter:blur(12px);
+  }
+  60%{
+    opacity:1;
+    transform:rotate(-7.5deg) skewX(-7.5deg) scale(0.85);
+    filter:blur(0px);
+  }
+  80%{
+    transform:rotate(-7.5deg) skewX(-7.5deg) scale(1.05);
+  }
+  100%{
+    transform:rotate(-7.5deg) skewX(-7.5deg) scale(1);
+  }
+}
+
+@keyframes failSubFade{
+  0%{
+    opacity:0;
+  }
+  100%{
+    opacity:1;
+  }
+}
+
+.success-main{
+  position:relative;
+  top:45px;
+  font-family:'Brushfire',sans-serif;
+  font-weight:500;
+  letter-spacing:1px;
+  font-size:clamp(73.5px,14.04vw,118.8px);
+  line-height:0.8;
+  max-width:92vw;
+  color:#000;
+  transform:rotate(-4deg) skewX(-3deg);
+  transform-origin:center;
+  display:block;
+  margin:0 auto;
+  animation:successPop 700ms ease-out both;
+}
+
+.success-underline{
+  display:block;
+  position:relative;
+  top:35px;
+  width:50%;
+  height:auto;
+  margin:0 auto 20px;
+  clip-path:inset(0 100% 0 0);
+  animation:slashReveal 300ms ease-out forwards;
+  animation-delay:600ms;
+}
+
+.success-sub{
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:clamp(17px,3.7vw,26px);
+  letter-spacing:-0.7px;
+  line-height:1.2;
+  color:#000;
+  opacity:1;
+  position:relative;
+  top:33px;
+  margin-top:calc(10px + 1vh);
+}
+
+#screen-reward .timer{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  top:calc(51vh + 48px);
+  bottom:auto;
+}
+
+.reward-bottom{
+  position:absolute;
+  left:50%;
+  bottom:calc(67px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);
+  width:min(760px,92vw);
+  font-family:'Oswald',-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Arial,sans-serif;
+  letter-spacing:-0.7px;
+  text-transform:none;
+  font-weight:500;
+  font-size:clamp(13px,2.8vw,18px);
+  color:#000;
+  text-decoration:none;
+  opacity:1;
+}
+
+/* DESKTOP BLOCKER */
+.desktop-blocker{
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  background:url('desktop-block-background.jpg') center center / cover no-repeat;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 22px;
+  box-sizing:border-box;
+}
+
+.desktop-box{
+  width:min(648px,92vw);
+}
+
+.desktop-title{
+  font-family:'Brushfire',sans-serif;
+  font-size:clamp(61px,8.6vw,99px);
+  margin:0 0 12px;
+  color:#000;
+  font-weight:500;
+  letter-spacing:1px;
+  line-height:0.8;
+  transform:rotate(-7.5deg) skewX(-7.5deg);
+  transform-origin:center;
+}
+
+.desktop-slash{
+  display:block;
+  width:300px;
+  height:auto;
+  margin:-20px auto 0;
+}
+
+.desktop-sub{
+  font-size:clamp(13px,1.8vw,18px);
+  margin:0;
+  color:#F90355;
+  font-weight:500;
+  line-height:1.35;
+  position:relative;
+  top:1.5em;
+}
+
+/* QR GATE */
+.qr-gate{
+  position:fixed;
+  inset:0;
+  z-index:999998;
+  background:url('bg-blank.jpg') center center / cover no-repeat;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 22px;
+  box-sizing:border-box;
+}
+
+.qr-box{
+  width:min(240px,92vw);
+}
+
+.qr-title{
+  font-family:'Brushfire',sans-serif;
+  font-size:clamp(72px,18vw,110px);
+  margin:0 0 12px;
+  color:#000;
+  font-weight:500;
+  letter-spacing:1px;
+  line-height:0.8;
+  transform:rotate(-7.5deg) skewX(-7.5deg);
+  transform-origin:center;
+  position:relative;
+  top:40px;
+}
+
+.qr-slash{
+  display:block;
+  width:180px;
+  height:auto;
+  margin:40px auto 0;
+  position:relative;
+  left:50%;
+  margin-left:-90px;
+}
+
+.qr-sub{
+  font-size:clamp(15px,2.07vw,21px);
+  margin:0;
+  color:#F90355;
+  font-weight:500;
+  line-height:1.35;
+  position:relative;
+  top:calc(1em + 0px);
+  width:80%;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.desktop-locations{
+  margin-top:4em;
+}
+
+.qr-locations{
+  margin-top:14em;
+  color:#777 !important;
+  font-size:80%;
+  text-decoration:none !important;
+}
+
+/* MINI FOOTER */
+.mini-footer{
+  position:fixed;
+  left:50%;
+  pointer-events:auto;
+  bottom:calc(115px + env(safe-area-inset-bottom));
+  transform:translate(-50%,-8px);
+  width:min(760px,92vw);
+  text-align:center;
+  font-size:clamp(10.5px,2.6vw,14px);
+  font-weight:400;
+  letter-spacing:-0.3px;
+  z-index:50;
+  color:#555;
+  opacity:1;
+}
+
+#screen-reward .mini-footer{
+  bottom:calc(40px + env(safe-area-inset-bottom));
+}
+
+#desktopBlocker .mini-footer{
+  color:#000;
+  bottom:100px;
+  font-size:65%;
+  font-weight:400;
+}
+
+#desktopBlocker .store-link{
+  color:inherit;
+  text-decoration:none;
+  font-size:inherit;
+}
+
+.mini-footer a{
+  display:inline-block;
+  color:inherit;
+  text-decoration:none;
+}
+
+.mini-footer a:hover{
+  text-decoration:underline;
+}
+
+.mini-footer .dot{
+  margin:0 6px;
+  opacity:0.6;
+}
+
+@keyframes footerFade{
+  from{
+    opacity:0;
+    transform:translateX(-50%) translateY(6px);
+  }
+  to{
+    opacity:0.85;
+    transform:translateX(-50%) translateY(0);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id='desktopBlocker' class='desktop-blocker'>
+  <div class='mini-footer'>
+    <span class='desktop-locations store-link'>Check out all the can or not locations</span>
+    <span class='dot'>·</span>
+    <a href='#' id='aboutLinkDesktop'>About can or not</a>
+    <span class='dot'>·</span>
+    <a href='https://mail.google.com/mail/?view=cm&fs=1&to=hellocanornot@gmail.com' target='_blank'>Contact</a>
+  </div>
+
+  <div class='desktop-box'>
+    <div class='desktop-title'>can or not is a mobile thing lah.</div>
+    <img src='slash-new.png' class='desktop-slash' alt='' />
+    <div class='desktop-sub'>Scan the QR code at participating locations to try it.</div>
+  </div>
+</div>
+
+<div id='qrGate' class='qr-gate'>
+  <div class='qr-box'>
+    <div class='qr-title'>can or not is QR only lah.</div>
+    <img src='slash-new.png' class='qr-slash' alt='' />
+    <div class='qr-sub'>Scan the QR code at participating locations to try it.</div>
+
+    <div class='store-link qr-locations'>Check out all the can or not locations</div>
+  </div>
+</div>
+
+<div class='wrap'>
+  <div class='card'>
+
+    <!-- PHONE -->
+    <div id='screen-phone' class='home'>
+
+      <div class='home-mid'>
+        <div class='phone-area home-phone'>
+
+          <div class='phone-label'>Select your country and enter your number</div>
+
+          <div class='phone-combo'>
+            <input id='phone' type='tel' placeholder='' />
+            <button class='home-enter' id='btnEnter'><span>→</span></button>
+          </div>
+
+          <div class='phone-note privacy-link' style='cursor:pointer; -webkit-tap-highlight-color:transparent;'>
+            We ask for your number to check if you're visiting from overseas. We don't collect or store it.
+          </div>
+
+          <div class='msg' id='phoneMsg'></div>
+
+        </div>
+      </div>
+
+      <div class='chop-hotspot' id='chopHotspot' aria-label='Confirm plus chop'></div>
+
+      <div class='chop-panel' id='chopPanel'>
+        <img src='chopsign.png' alt='How to confirm if you haven’t tried?!??' />
+      </div>
+
+      <div class='kopi-hotspot' id='kopiHotspot' aria-label='Kopi order'></div>
+      <div class='sign54-hotspot' id='sign54Hotspot' aria-label='BLK 54'></div>
+      <div class='about-hotspot' id='aboutHotspot' aria-label='What is Can or Not?'></div>
+      <div class='locations-hotspot store-link' aria-label='Can or Not locations'></div>
+      <div class='bird-hotspot' id='birdHotspot' aria-label='Hear from the bird'></div>
+
+      <div class='about-home-panel' id='aboutHomePanel'>
+        <img src='aboutsign.webp' alt='About can or not' />
+      </div>
+
+      <div class='kopi-panel' id='kopiPanel'>
+        <img src='kopisign.png' alt='Want kopi? Know how to order or not?' />
+      </div>
+
+      <div class='sign54-panel' id='sign54Panel'>
+        <img src='54sign.png' alt='Wah. You click everything ah?' />
+      </div>
+
+      <div class='bird-panel' id='birdPanel'>
+        <img src='birdsign.png' alt='Aiyo. Stop procrastinating and get on with it.' />
+      </div>
+
+    </div>
+
+    <!-- PHRASE -->
+    <div id='screen-phrase' style='display:none;'>
+      <div class='phrase-top'>Say this to the staff:</div>
+
+      <div class='phrase-bubble'>
+        <p class='phrase-big' id='phraseText'>...</p>
+      </div>
+
+      <div class='phrase-judge'>Staff says:</div>
+
+      <div class='phrase-actions'>
+        <button class='btn phrase-btn good' id='btnGood'>
+          <img src='tick.svg' class='btn-icon tick-icon' alt='' />
+          <span class='btn-label'>Good lah</span>
+        </button>
+
+        <button class='btn phrase-btn dark' id='btnSalah'>
+          <img src='cross.svg' class='btn-icon cross-icon' alt='' />
+          <span class='btn-label salah-text'>Salah</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- FAIL -->
+    <div id='screen-fail' style='display:none;'>
+      <div class='fail-wrap'>
+        <div class='fail-main'>Oops!</div>
+        <div class='fail-sub' id='failBottom'></div>
+        <button class='fail-pill' id='btnRetry'>Try again</button>
+      </div>
+    </div>
+
+    <!-- LOCAL BLOCK -->
+    <div id='screen-local' style='display:none;'>
+      <div class='fail-wrap'>
+        <div class='fail-main'>Local detected!</div>
+        <div class='fail-sub'>Don't play play lah</div>
+      </div>
+    </div>
+
+    <!-- REWARD -->
+    <div id='screen-reward' style='display:none;'>
+
+      <div class='success-wrap'>
+        <div class='success-top'>Well done!</div>
+
+        <div class='success-main' id='successMain'>
+          You got<br />standard!
+        </div>
+
+        <img src='slash-new.png' class='success-underline' alt='' />
+
+        <div class='success-sub'>
+          Grab your reward and enjoy<br />
+          Singapore even more lah.
+        </div>
+      </div>
+
+      <div class='timer' id='timerText'>Valid for: 01:00</div>
+
+      <button
+        id='btnShare'
+        type='button'
+        style='position:absolute; left:50%; transform:translateX(-50%); top:calc(63vh + 30px); padding:0; width:100px; height:100px; border-radius:50%; border:0; background:#F90355; color:#fff; font-family:Oswald,sans-serif; font-weight:600; font-size:clamp(16px,3.5vw,22px); box-shadow:0 10px 22px rgba(0,0,0,0.22); cursor:pointer;'
+      >Must share!</button>
+
+      <div class='reward-bottom store-link'>Check out all the can or not locations</div>
+
+      <div class='mini-footer'>
+        <a href='#' id='aboutLinkReward'>About</a>&nbsp;&nbsp;
+<a href='#' class='privacy-link'>Privacy</a>&nbsp;&nbsp;
+        <a href='https://mail.google.com/mail/?view=cm&fs=1&to=hellocanornot@gmail.com' target='_blank'>Contact</a>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- STORE MODAL -->
+<div id='storeModal' class='store-modal'>
+  <div class='store-modal-content'>
+
+    <img src='logo.png' alt='can or not' class='store-logo' />
+
+    <h2>Participating Stores</h2>
+
+    <div class='store-modal-sub'>
+      Rewards are decided by each store.<br>
+      You'll find out when you get there.<br>
+      Assuming you get the phrase right lah.
+    </div>
+
+    <div class='store-item'>
+      <strong>Ah Seng Kopi Stall</strong><br />
+      Chinatown • Hawker
+    </div>
+
+    <div class='store-item'>
+      <strong>Shiok Burger</strong><br />
+      Tanjong Pagar • Café
+    </div>
+
+    <div class='store-item'>
+      <strong>Lah Bar</strong><br />
+      Kampong Glam • Bar
+    </div>
+
+  </div>
+</div>
+
+<!-- ABOUT MODAL -->
+<div id='aboutModal' class='store-modal'>
+  <div class='store-modal-content'>
+
+    <img src='logo.png' alt='can or not' class='about-logo' />
+
+    <div class='store-modal-sub'>
+      <p>A way to discover a side of Singapore you might otherwise miss. Try your Singlish at participating stores. If the staff says good lah, you’ll unlock a small reward.</p>
+
+      <p>But the real reward is getting a little closer to the Singapore behind the touristy stuff. Because sometimes the best travel stories start like this.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- PRIVACY MODAL -->
+<div id='privacyModal' class='store-modal'>
+  <div class='store-modal-content' style='width:100vw; height:100dvh; border-radius:0; justify-content:flex-start; background:rgba(0,0,0,0.15); padding:60px 28px 40px;'>
+
+    <h2 style='text-align:center; width:100%;'>Privacy Policy</h2>
+
+    <div class='store-modal-sub' style='text-align:left; font-size:15px;'>
+
+      <p><strong>Last updated: 12 October 2026</strong></p>
+
+      <p>Can or Not is a little game designed to help visitors discover Singapore through its local language and businesses.</p>
+
+      <p><strong>Phone numbers</strong><br>
+      We ask for your phone number to check if you’re visiting from overseas. We don’t collect or store your number.</p>
+
+      <p><strong>Game activity</strong><br>
+      We record anonymous game activity, including the participating location, date, time and whether a phrase was successful. This helps us understand how the game is being used.</p>
+
+      <p><strong>Personal information</strong><br>
+      We do not ask for your name, email address or precise location.</p>
+
+      <p><strong>Third-party services</strong><br>
+      Can or Not uses Google services to record game activity and external services to deliver parts of the website. These providers may process technical information when you use the app.</p>
+
+      <p><strong>Contact</strong><br>
+      Questions about privacy? Email hellocanornot@gmail.com.</p>
+
+    </div>
+
+  </div>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js' defer></script>
+<script src='https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'></script>
+
+<script>
+(() => {
+
+  // ---------- SCAN PING ----------
+  const loc = (new URLSearchParams(window.location.search).get('loc') || '').trim();
+
+  if(loc){
+    new Image().src =
+      'https://script.google.com/macros/s/AKfycbzz3yGeLl-BAdWdLwU_gFwsQ9qKCT1tXtoxvcZUaqWybju8HONDdd9yzeltZbhVKt2N/exec?loc=' +
+      encodeURIComponent(loc);
+  }
+
+  'use strict';
+
+  // ---------- CONFIG ----------
+  const DEV_LOC = 'dev';
+  const DESKTOP_BREAKPOINT = 900;
+  const RECENT_BLOCK = 5;
+  const REWARD_SECONDS = 60;
+
+  // ---------- DOM ----------
+  const desktopBlocker = document.getElementById('desktopBlocker');
+  const qrGate = document.getElementById('qrGate');
+  const wrap = document.querySelector('.wrap');
+
+  const screenPhone = document.getElementById('screen-phone');
+  const screenPhrase = document.getElementById('screen-phrase');
+  const screenReward = document.getElementById('screen-reward');
+  const successMain = document.getElementById('successMain');
+  const screenFail = document.getElementById('screen-fail');
+  const screenLocal = document.getElementById('screen-local');
+
+  const phoneInput = document.getElementById('phone');
+  const phoneMsg = document.getElementById('phoneMsg');
+  const btnEnter = document.getElementById('btnEnter');
+
+  const phraseText = document.getElementById('phraseText');
+  const btnGood = document.getElementById('btnGood');
+  const btnSalah = document.getElementById('btnSalah');
+  const btnRetry = document.getElementById('btnRetry');
+
+  const timerText = document.getElementById('timerText');
+  const failBottom = document.getElementById('failBottom');
+  const btnShare = document.getElementById('btnShare');
+
+  const birdHotspot = document.getElementById('birdHotspot');
+  const birdPanel = document.getElementById('birdPanel');
+
+  const sign54Hotspot = document.getElementById('sign54Hotspot');
+  const sign54Panel = document.getElementById('sign54Panel');
+
+  const chopHotspot = document.getElementById('chopHotspot');
+  const chopPanel = document.getElementById('chopPanel');
+
+  const kopiHotspot = document.getElementById('kopiHotspot');
+  const kopiPanel = document.getElementById('kopiPanel');
+
+  const storeModal = document.getElementById('storeModal');
+  const storeLinks = document.querySelectorAll('.store-link');
+
+  if(!wrap || !screenPhone || !screenPhrase || !screenReward || !screenFail){
+    console.error('can or not: missing core DOM nodes.');
+    return;
+  }
+
+  // ---------- HELPERS ----------
+  const qs = () => new URLSearchParams(window.location.search);
+
+  const getLoc = () =>
+    (qs().get('loc') || '').trim().toLowerCase();
+
+  const isDev = () =>
+    getLoc() === DEV_LOC;
+
+  const isDesktopLike = () => {
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const wideScreen = window.innerWidth >= DESKTOP_BREAKPOINT;
+    return finePointer && wideScreen;
+  };
+
+  const show = el => {
+    if(el) el.style.display = 'block';
+  };
+
+  const hide = el => {
+    if(el) el.style.display = 'none';
+  };
+
+  const preloadImages = [
+    'bg-light.jpg',
+    'bg-blank.jpg',
+    'logo.png',
+    'slash-new.png'
+  ];
+
+  preloadImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
+  const setBg = which => {
+    const img =
+      (which === 'light')
+        ? "url('bg-light.jpg')"
+        : "url('bg-blank.jpg')";
+
+    document.documentElement.style.setProperty('--bg-img', img);
+  };
+
+  // ---------- GATES ----------
+  const applyGates = () => {
+    const desktop = isDesktopLike();
+    const loc = getLoc();
+    const hasLoc = !!loc;
+    const dev = isDev() || qs().get('test') === '1';
+
+    // Desktop blocker
+    if(desktop && !dev){
+      if(desktopBlocker) desktopBlocker.style.display = 'flex';
+      if(qrGate) qrGate.style.display = 'none';
+      wrap.style.display = 'none';
+      return;
+    }
+
+    // QR gate
+    if(!desktop && !dev && !hasLoc){
+      if(desktopBlocker) desktopBlocker.style.display = 'none';
+      if(qrGate) qrGate.style.display = 'flex';
+      wrap.style.display = 'none';
+      return;
+    }
+
+    // Allowed
+    if(desktopBlocker) desktopBlocker.style.display = 'none';
+    if(qrGate) qrGate.style.display = 'none';
+    wrap.style.display = '';
+  };
+
+  let gateRaf = 0;
+
+  const scheduleGates = () => {
+    if(gateRaf) cancelAnimationFrame(gateRaf);
+
+    gateRaf = requestAnimationFrame(() => {
+      gateRaf = 0;
+      applyGates();
+    });
+  };
+
+  window.addEventListener('load', scheduleGates);
+  window.addEventListener('resize', scheduleGates);
+  window.addEventListener('orientationchange', scheduleGates);
+
+  // ---------- DATA ----------
+  const PHRASES = [
+    'Steady lah, got standard',
+    'Hosei liao',
+    'Queue until like this, must be good eh',
+    'Can tapao or not ah?',
+    'Wah lao today very hot sia',
+    'Uncle kopi-c siew dai',
+    'Kuah simi kuah?',
+    'Wah this one damn shiok',
+    'Alamak why like that',
+    'This one power lah',
+    'Auntie give chance can or not',
+    'Eh don\'t play play',
+    'Confirm plus chop',
+    'Die die must try',
+    'Wah this one next level sia',
+    'Sibei solid',
+    'Can lah can lah',
+    'Jialat already',
+    'Chope first ah',
+    'Walao eh don\'t bluff me',
+    'Paiseh ah first time',
+    'Kopi-c siew dai can or cannot',
+    'Don\'t so kiasu lah',
+    'Wah I blur like sotong already',
+    'Win liao lor'
+  ];
+
+  const FAIL_BOTTOM_LINES = [
+    'Well done.<br>You invented new Singlish.<br>But wrong mission, lor.',
+    'Nice attempt!<br>But no, lor.',
+    'Wah, creative sia.<br>But no.',
+    'Effort can.<br>Result cannot.',
+    'You committed fully.<br>To the wrong delivery.',
+    'Great effort.<br>You created a remix of Singlish.<br>But original version only, lah.'
+  ];
+
+  const SUCCESS_LINES = [
+    'You got<br>standard',
+    'Singlish<br>mastered',
+    'Standard<br>achieved',
+    'Mission<br>steady',
+    'Just like<br>a local',
+    'Shiok<br>confirmed',
+    'Local<br>approved',
+    'Swee lah!'
+  ];
+
+  const PHRASE_BREAKS = {
+    'Steady lah, got standard':
+      'Steady lah,<br>got standard',
+
+    'Queue until like this, must be good eh':
+      'Queue until like this<br>must be good eh',
+
+    'Wah lao today very hot sia':
+      'Wah lao today very hot sia',
+
+    'Auntie give chance can or not':
+      'Auntie<br>give chance<br>can or not',
+
+    'Kopi-c siew dai can or cannot':
+      'Kopi-c siew dai can or cannot',
+
+    'Chope first ah':
+      'Chope<br>first ah',
+
+    'Kuah simi kuah?':
+      'Kuah simi kuah?',
+
+    'Die die must try':
+      'Die die<br>must try',
+
+    'Wah this one next level sia':
+      'Wah this one next level sia',
+
+    'Don\'t so kiasu lah':
+      'Don\'t so kiasu lah',
+
+    'Can lah can lah':
+      'Can lah<br>can lah',
+
+    'Paiseh ah first time':
+      'Paiseh ah first time',
+
+    'Eh don\'t play play':
+      'Eh don\'t<br>play play',
+
+    'Wah I blur like sotong already':
+      'Wah I blur like sotong already',
+
+    'Walao eh don\'t bluff me':
+      'Walao<br>eh don\'t<br>bluff me',
+
+    'Can tapao or not ah?':
+      'Can tapao<br>or not ah?',
+
+    'Uncle kopi-c siew dai':
+      'Uncle<br>kopi-c<br>siew dai',
+
+    'Confirm plus chop':
+      'Confirm<br>plus chop',
+
+    'This one power lah':
+      'This one power lah',
+
+    'Wah this one damn shiok':
+      'Wah<br>this one<br>damn shiok',
+
+    'Win liao lor':
+      'Win<br>liao lor',
+
+    'Alamak why like that':
+      'Alamak<br>why like that'
+  };
+
+  // ---------- HOME HOTSPOTS ----------
+  if(chopHotspot && chopPanel){
+    chopHotspot.addEventListener('click', () => {
+      chopPanel.style.display =
+        chopPanel.style.display === 'block' ? 'none' : 'block';
+    });
+
+    chopPanel.addEventListener('click', () => {
+      chopPanel.style.display = 'none';
+    });
+  }
+
+  if(kopiHotspot && kopiPanel){
+    kopiHotspot.addEventListener('click', () => {
+      kopiPanel.style.display =
+        kopiPanel.style.display === 'block' ? 'none' : 'block';
+    });
+
+    kopiPanel.addEventListener('click', () => {
+      kopiPanel.style.display = 'none';
+    });
+  }
+
+  if(sign54Hotspot && sign54Panel){
+    sign54Hotspot.addEventListener('click', () => {
+      sign54Panel.style.display =
+        sign54Panel.style.display === 'block' ? 'none' : 'block';
+    });
+
+    sign54Panel.addEventListener('click', () => {
+      sign54Panel.style.display = 'none';
+    });
+  }
+
+  if(birdHotspot && birdPanel){
+    birdHotspot.addEventListener('click', () => {
+      birdPanel.style.display =
+        birdPanel.style.display === 'block' ? 'none' : 'block';
+    });
+
+    birdPanel.addEventListener('click', () => {
+      birdPanel.style.display = 'none';
+    });
+  }
+
+  // ---------- STORE MODAL ----------
+  storeLinks.forEach(el => {
+    el.addEventListener('click', () => {
+      if(storeModal) storeModal.style.display = 'flex';
+    });
+  });
+
+  if(storeModal){
+    storeModal.addEventListener('click', () => {
+      storeModal.style.display = 'none';
+    });
+  }
+
+  // ---------- ABOUT ----------
+  const aboutLink = document.getElementById('aboutLink');
+  const aboutLinkReward = document.getElementById('aboutLinkReward');
+  const aboutLinkDesktop = document.getElementById('aboutLinkDesktop');
+  const aboutModal = document.getElementById('aboutModal');
+  const aboutHotspot = document.getElementById('aboutHotspot');
+  const aboutHomePanel = document.getElementById('aboutHomePanel');
+
+  if(aboutHotspot && aboutHomePanel){
+    aboutHotspot.addEventListener('click', () => {
+      aboutHomePanel.style.display =
+        aboutHomePanel.style.display === 'block' ? 'none' : 'block';
+    });
+
+    aboutHomePanel.addEventListener('click', () => {
+      aboutHomePanel.style.display = 'none';
+    });
+  }
+
+  if(aboutLink){
+    aboutLink.addEventListener('click', e => {
+      e.preventDefault();
+      if(aboutModal) aboutModal.style.display = 'flex';
+    });
+  }
+
+  if(aboutLinkReward){
+    aboutLinkReward.addEventListener('click', e => {
+      e.preventDefault();
+      if(aboutModal) aboutModal.style.display = 'flex';
+    });
+  }
+
+  if(aboutLinkDesktop){
+    aboutLinkDesktop.addEventListener('click', e => {
+      e.preventDefault();
+      if(aboutModal) aboutModal.style.display = 'flex';
+    });
+  }
+
+  if(aboutModal){
+    aboutModal.addEventListener('click', () => {
+      aboutModal.style.display = 'none';
+    });
+  }
+
+// ---------- PRIVACY ----------
+const privacyModal = document.getElementById('privacyModal');
+const privacyLinks = document.querySelectorAll('.privacy-link');
+
+privacyLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    if(privacyModal) privacyModal.style.display = 'flex';
+  });
+});
+
+if(privacyModal){
+  privacyModal.addEventListener('click', () => {
+    privacyModal.style.display = 'none';
+  });
+}
+  // ---------- intl-tel-input ----------
+  const iti = window.intlTelInput(phoneInput, {
+    separateDialCode:true,
+    initialCountry:'us',
+    preferredCountries:['us'],
+    nationalMode:true,
+    autoPlaceholder:'off',
+    formatOnDisplay:false,
+    utilsScript:'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js'
+  });
+
+  iti.setCountry('us');
+
+  // ---------- STATE ----------
+  let currentPhrase = '';
+  const recentPhrases = [];
+
+  let currentFailLine = '';
+  const recentFailLines = [];
+
+  let rewardTimer = null;
+  let secondsLeft = 0;
+
+  let typer = null;
+  let typeDelay = null;
+
+  const cancelTyping = () => {
+    if(typer){
+      clearInterval(typer);
+      typer = null;
+    }
+
+    if(typeDelay){
+      clearTimeout(typeDelay);
+      typeDelay = null;
+    }
+  };
+
+  // ---------- NAV ----------
+  const gotoPhone = () => {
+    cancelTyping();
+
+    hide(screenPhrase);
+    hide(screenReward);
+    hide(screenFail);
+    hide(screenLocal);
+
+    show(screenPhone);
+    stopTimer();
+    setBg('light');
+  };
+
+  const gotoPhrase = () => {
+    cancelTyping();
+
+    hide(screenPhone);
+    hide(screenReward);
+    hide(screenFail);
+    hide(screenLocal);
+
+    show(screenPhrase);
+    stopTimer();
+    setNewPhrase();
+    setBg('blank');
+  };
+
+  const gotoReward = () => {
+    cancelTyping();
+
+    hide(screenPhone);
+    hide(screenPhrase);
+    hide(screenFail);
+    hide(screenLocal);
+
+    show(screenReward);
+    setBg('blank');
+
+    let next;
+
+    do{
+      next = SUCCESS_LINES[
+        Math.floor(Math.random() * SUCCESS_LINES.length)
+      ];
+    }while(next === successMain.innerHTML);
+
+    successMain.innerHTML = next;
+  };
+
+  const gotoFail = () => {
+    cancelTyping();
+
+    hide(screenPhone);
+    hide(screenPhrase);
+    hide(screenReward);
+    hide(screenLocal);
+
+    show(screenFail);
+    setBg('blank');
+
+    if(failBottom){
+      let next = currentFailLine;
+
+      do{
+        next = FAIL_BOTTOM_LINES[
+          Math.floor(Math.random() * FAIL_BOTTOM_LINES.length)
+        ];
+      }while(
+        recentFailLines.includes(next) ||
+        next === currentFailLine
+      );
+
+      currentFailLine = next;
+
+      recentFailLines.push(currentFailLine);
+
+      if(recentFailLines.length > RECENT_BLOCK){
+        recentFailLines.shift();
+      }
+
+      failBottom.innerHTML = currentFailLine;
+    }
+  };
+
+  const gotoLocalBlock = () => {
+    cancelTyping();
+
+    hide(screenPhone);
+    hide(screenPhrase);
+    hide(screenReward);
+    hide(screenFail);
+
+    show(screenLocal);
+    setBg('blank');
+  };
+
+  // ---------- PHRASES ----------
+  const setNewPhrase = () => {
+    let next = currentPhrase;
+
+    do{
+      next = PHRASES[
+        Math.floor(Math.random() * PHRASES.length)
+      ];
+    }while(
+      recentPhrases.includes(next) ||
+      next === currentPhrase
+    );
+
+    currentPhrase = next;
+
+    recentPhrases.push(currentPhrase);
+
+    if(recentPhrases.length > RECENT_BLOCK){
+      recentPhrases.shift();
+    }
+
+    const displayText =
+      PHRASE_BREAKS[currentPhrase] || currentPhrase;
+
+    cancelTyping();
+
+    phraseText.innerHTML = '';
+
+    phraseText.style.fontSize =
+      currentPhrase === 'Queue until like this, must be good eh'
+        ? 'clamp(66px,12.6vw,107px)'
+        : '';
+
+    let i = 0;
+
+    typeDelay = setTimeout(() => {
+      typeDelay = null;
+
+      const cleanLen =
+        displayText.replace(/<br>/g, '').length;
+
+      const base = 1000;
+      const duration = Math.max(base, cleanLen * 40);
+      const intervalTime =
+        duration / Math.max(cleanLen, 1);
+
+      typer = setInterval(() => {
+
+        if(screenPhrase.style.display === 'none'){
+          cancelTyping();
+          return;
+        }
+
+        if(displayText.substr(i,4) === '<br>'){
+          phraseText.innerHTML += '<br>';
+          i += 4;
+        }else{
+          phraseText.innerHTML += displayText[i] || '';
+          i++;
+        }
+
+        if(i >= displayText.length){
+          cancelTyping();
+        }
+
+      }, intervalTime);
+
+    }, 200);
+  };
+
+  // ---------- VALIDATION ----------
+  const enterApp = () => {
+    const dial = iti.getSelectedCountryData().dialCode;
+    const rawValue = (phoneInput.value || '').trim();
+    const num = rawValue.replace(/\D/g, '');
+
+    // locals blocked hard
+    if(dial === '65'){
+      phoneMsg.textContent = '';
+      gotoLocalBlock();
+      return;
+    }
+
+    const fail = () => {
+      phoneMsg.textContent = 'Invalid number lah.';
+    };
+
+    if(!rawValue) return fail();
+    if(/[a-zA-Z]/.test(rawValue)) return fail();
+    if(num.length < 7 || num.length > 15) return fail();
+
+    const hasUtils =
+      typeof window.intlTelInputUtils !== 'undefined';
+
+    if(hasUtils){
+      if(!iti.isValidNumber()) return fail();
+    }
+
+    // all same digit
+    if(/^(\d)\1+$/.test(num)) return fail();
+
+    // common fake endings
+    if(
+      /0000$/.test(num) ||
+      /1234$/.test(num) ||
+      /5555$/.test(num)
+    ){
+      return fail();
+    }
+
+    // repeating chunks
+    const isRepeatOf = (s,size) => {
+      if(s.length % size !== 0) return false;
+
+      const chunk = s.slice(0,size);
+      const reps = s.length / size;
+
+      if(reps < 2) return false;
+
+      return chunk.repeat(reps) === s;
+    };
+
+    if(
+      isRepeatOf(num,2) ||
+      isRepeatOf(num,3) ||
+      isRepeatOf(num,4)
+    ){
+      return fail();
+    }
+
+    // too many of same digit
+    const counts = {};
+
+    for(const ch of num){
+      counts[ch] = (counts[ch] || 0) + 1;
+    }
+
+    if(
+      Math.max(...Object.values(counts)) >=
+      Math.max(5,Math.ceil(num.length * 0.6))
+    ){
+      return fail();
+    }
+
+    // ascending / descending
+    let asc = true;
+    let desc = true;
+
+    for(let i = 1; i < num.length; i++){
+      const prev = Number(num[i - 1]);
+      const cur = Number(num[i]);
+
+      if(cur !== prev + 1) asc = false;
+      if(cur !== prev - 1) desc = false;
+    }
+
+    if(asc || desc) return fail();
+
+    phoneMsg.textContent = '';
+    gotoPhrase();
+  };
+
+  // ---------- TIMER ----------
+  const updateTimer = () => {
+    const m = Math.floor(secondsLeft / 60);
+    const s = secondsLeft % 60;
+
+    timerText.textContent =
+      `Valid for: ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  };
+
+  const stopTimer = () => {
+    if(rewardTimer){
+      clearInterval(rewardTimer);
+      rewardTimer = null;
+    }
+  };
+
+  const startTimer = t => {
+    stopTimer();
+
+    secondsLeft = t;
+    updateTimer();
+
+    rewardTimer = setInterval(() => {
+      secondsLeft--;
+      updateTimer();
+
+      if(secondsLeft <= 0){
+        stopTimer();
+        gotoPhone();
+      }
+    },1000);
+  };
+
+  // ---------- EVENTS ----------
+  btnEnter.addEventListener('click', enterApp);
+
+  phoneInput.addEventListener('keydown', e => {
+    if(e.key === 'Enter'){
+      enterApp();
+    }
+  });
+
+  btnSalah.addEventListener('click', () => {
+    fetch(
+      'https://script.google.com/macros/s/AKfycbzz3yGeLl-BAdWdLwU_gFwsQ9qKCT1tXtoxvcZUaqWybju8HONDdd9yzeltZbhVKt2N/exec?loc=' +
+      encodeURIComponent(
+        new URLSearchParams(window.location.search).get('loc') || ''
+      ) +
+      '&result=FAIL&t=' +
+      Date.now()
+    );
+
+    gotoFail();
+  });
+
+  btnRetry.addEventListener('click', gotoPhrase);
+
+  btnGood.addEventListener('click', () => {
+    fetch(
+      'https://script.google.com/macros/s/AKfycbzz3yGeLl-BAdWdLwU_gFwsQ9qKCT1tXtoxvcZUaqWybju8HONDdd9yzeltZbhVKt2N/exec?loc=' +
+      encodeURIComponent(
+        new URLSearchParams(window.location.search).get('loc') || ''
+      ) +
+      '&result=PASS&t=' +
+      Date.now()
+    );
+
+         if(window.confetti){
+      confetti({
+        particleCount:120,
+        spread:360,
+        startVelocity:25,
+        gravity:0,
+        ticks:55,
+        scalar:1.2,
+        origin:{ x:0.5, y:0.5 },
+        colors:['#F90355','#111111','#F5C542','#FFFFFF','#FC8983']
+      });
+    }
+    gotoReward();
+    startTimer(REWARD_SECONDS);
+  });
+
+  if(btnShare){
+    btnShare.addEventListener('click', async () => {
+      if(navigator.share){
+        try{
+          await navigator.share({
+            title:'I got standard lah!',
+            text:'Just spoke Singlish to a local in Singapore. Not bad lah.'
+          });
+        }catch(err){}
+      }
+    });
+  }
+
+  // ---------- BOOT ----------
+  applyGates();
+  gotoPhone();
+
+})();
+</script>
+
+</body>
+</html>
+
