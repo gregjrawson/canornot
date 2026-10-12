@@ -1272,9 +1272,8 @@ html, body, input, button, textarea, select{
             <button class='home-enter' id='btnEnter'><span>→</span></button>
           </div>
 
-          <div class='phone-note'>
-            Your number is used only to verify you’re an international visitor.
-            We don’t store phone numbers.
+          <div class='phone-note privacy-link' style='cursor:pointer; -webkit-tap-highlight-color:transparent;'>
+            We ask for your number to check if you're visiting from overseas. We don't collect or store it.
           </div>
 
           <div class='msg' id='phoneMsg'></div>
@@ -1382,6 +1381,7 @@ html, body, input, button, textarea, select{
 
       <div class='mini-footer'>
         <a href='#' id='aboutLinkReward'>About</a>&nbsp;&nbsp;
+<a href='#' class='privacy-link'>Privacy</a>&nbsp;&nbsp;
         <a href='https://mail.google.com/mail/?view=cm&fs=1&to=hellocanornot@gmail.com' target='_blank'>Contact</a>
       </div>
 
@@ -1437,12 +1437,52 @@ html, body, input, button, textarea, select{
   </div>
 </div>
 
+<!-- PRIVACY MODAL -->
+<div id='privacyModal' class='store-modal'>
+  <div class='store-modal-content' style='width:100vw; height:100dvh; border-radius:0; justify-content:flex-start; background:rgba(0,0,0,0.15); padding:60px 28px 40px;'>
+
+    <h2 style='text-align:center; width:100%;'>Privacy Policy</h2>
+
+    <div class='store-modal-sub' style='text-align:left; font-size:15px;'>
+
+      <p><strong>Last updated: 12 October 2026</strong></p>
+
+      <p>Can or Not is a little game designed to help visitors discover Singapore through its local language and businesses.</p>
+
+      <p><strong>Phone numbers</strong><br>
+      We ask for your phone number to check if you’re visiting from overseas. We don’t collect or store your number.</p>
+
+      <p><strong>Game activity</strong><br>
+      We record anonymous game activity, including the participating location, date, time and whether a phrase was successful. This helps us understand how the game is being used.</p>
+
+      <p><strong>Personal information</strong><br>
+      We do not ask for your name, email address or precise location.</p>
+
+      <p><strong>Third-party services</strong><br>
+      Can or Not uses Google services to record game activity and external services to deliver parts of the website. These providers may process technical information when you use the app.</p>
+
+      <p><strong>Contact</strong><br>
+      Questions about privacy? Email hellocanornot@gmail.com.</p>
+
+    </div>
+
+  </div>
+</div>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js' defer></script>
 <script src='https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'></script>
 
 <script>
 (() => {
+
+  // ---------- SCAN PING ----------
+  const loc = (new URLSearchParams(window.location.search).get('loc') || '').trim();
+
+  if(loc){
+    new Image().src =
+      'https://script.google.com/macros/s/AKfycbzz3yGeLl-BAdWdLwU_gFwsQ9qKCT1tXtoxvcZUaqWybju8HONDdd9yzeltZbhVKt2N/exec?loc=' +
+      encodeURIComponent(loc);
+  }
 
   'use strict';
 
@@ -1506,10 +1546,7 @@ html, body, input, button, textarea, select{
   const isDev = () =>
     getLoc() === DEV_LOC;
 
-    const isDesktopLike = () => {
-    const isPhone = /iPhone|iPod|Android.*Mobile/i.test(navigator.userAgent);
-    if(isPhone) return false;
-
+  const isDesktopLike = () => {
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const wideScreen = window.innerWidth >= DESKTOP_BREAKPOINT;
     return finePointer || wideScreen;
@@ -1809,6 +1846,22 @@ html, body, input, button, textarea, select{
     });
   }
 
+// ---------- PRIVACY ----------
+const privacyModal = document.getElementById('privacyModal');
+const privacyLinks = document.querySelectorAll('.privacy-link');
+
+privacyLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    if(privacyModal) privacyModal.style.display = 'flex';
+  });
+});
+
+if(privacyModal){
+  privacyModal.addEventListener('click', () => {
+    privacyModal.style.display = 'none';
+  });
+}
   // ---------- intl-tel-input ----------
   const iti = window.intlTelInput(phoneInput, {
     separateDialCode:true,
@@ -2173,16 +2226,18 @@ html, body, input, button, textarea, select{
       Date.now()
     );
 
-    if(window.confetti){
+         if(window.confetti){
       confetti({
-        particleCount:100,
-        spread:75,
-        startVelocity:40,
-        origin:{ y:0.6 },
-        colors:['#ff2d55','#ffffff','#ff6b81']
+        particleCount:120,
+        spread:360,
+        startVelocity:25,
+        gravity:0,
+        ticks:55,
+        scalar:1.2,
+        origin:{ x:0.5, y:0.5 },
+        colors:['#F90355','#111111','#F5C542','#FFFFFF','#FC8983']
       });
     }
-
     gotoReward();
     startTimer(REWARD_SECONDS);
   });
@@ -2209,3 +2264,4 @@ html, body, input, button, textarea, select{
 
 </body>
 </html>
+
