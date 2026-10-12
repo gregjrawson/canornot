@@ -1506,7 +1506,10 @@ html, body, input, button, textarea, select{
   const isDev = () =>
     getLoc() === DEV_LOC;
 
-  const isDesktopLike = () => {
+    const isDesktopLike = () => {
+    const isPhone = /iPhone|iPod|Android.*Mobile/i.test(navigator.userAgent);
+    if(isPhone) return false;
+
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const wideScreen = window.innerWidth >= DESKTOP_BREAKPOINT;
     return finePointer || wideScreen;
