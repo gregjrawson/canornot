@@ -1549,7 +1549,7 @@ html, body, input, button, textarea, select{
   const isDesktopLike = () => {
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const wideScreen = window.innerWidth >= DESKTOP_BREAKPOINT;
-    return finePointer || wideScreen;
+    return finePointer && wideScreen;
   };
 
   const show = el => {
