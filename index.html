@@ -1052,6 +1052,7 @@ html, body, input, button, textarea, select{
   opacity:1;
 }
 
+
 /* DESKTOP BLOCKER */
 .desktop-blocker{
   position:fixed;
@@ -1097,6 +1098,16 @@ html, body, input, button, textarea, select{
   line-height:1.35;
   position:relative;
   top:1.5em;
+}
+
+@media (min-width:900px) and (hover:hover) and (pointer:fine){
+  .wrap{
+    display:none;
+  }
+
+  .desktop-blocker{
+    display:flex;
+  }
 }
 
 /* QR GATE */
